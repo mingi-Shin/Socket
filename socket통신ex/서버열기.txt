@@ -1,1 +1,5 @@
+//서버 만들기
+npm init
+npm install express ws
+
 node server.js 입력
