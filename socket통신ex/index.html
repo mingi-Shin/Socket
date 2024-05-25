@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    button {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>WebSocket Chat</h1>
+  <div id="messages">출력됩니다.</div>
+  <input type="text" id="messageInput" placeholder="Type a message">
+  <button id="sendButton">Send</button><br>
+  <button id="send" onclick="socket.send('context')"> 고정 메세지 보내기 </button>
+
+  <script>
+    let socket = new WebSocket("ws://localhost:8081"); //웹소켓 열어  ws:// or wss://
+
+    socket.addEventListener('open', function (event) {
+      console.log('웹소켓 통신을 시작합니다.');
+    });
+
+    socket.addEventListener('message', function (event) {
+      const messageContainer = document.getElementById('messages');
+      const messageElement = document.createElement('div');
+      messageElement.textContent = 'GM라파엘: ' + event.data;
+      messageContainer.appendChild(messageElement);
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+    });
+
+    document.getElementById('sendButton').addEventListener('click', function () {
+      const input = document.getElementById('messageInput');
+      const message = input.value;
+      if (message) {
+        socket.send(message);
+        const messageContainer = document.getElementById('messages');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = '나 : ' + message;
+        messageContainer.appendChild(messageElement);
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+        input.value = '';
+      }
+    });
+
+
+  </script>
+
+</body>
+</html>
